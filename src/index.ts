@@ -3,7 +3,7 @@ import path from 'node:path'
 import { appendFile } from 'node:fs/promises'
 import conf from './conf.json'
 
-const historyFile = path.join(__dirname, conf.historyFile)
+const historyFile = path.join(__dirname, '..', conf.historyFile)
 
 function timeout(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
