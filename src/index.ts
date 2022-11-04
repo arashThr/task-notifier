@@ -8,11 +8,10 @@ function timeout(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-async function startTimer(duration: number, desc: string) {
+async function startTimer(seconds: number, desc: string) {
   const start = new Date()
-  await timeout(duration * 1000)
+  await timeout(seconds * 1000)
   const iconPath = path.join(__dirname, 'task.jpg')
-  console.log(iconPath)
   notifier.notify({
     message: desc,
     actions: 'Mark as done',
@@ -23,19 +22,21 @@ async function startTimer(duration: number, desc: string) {
   }, (err, response, meta) => {
     if (err)
       throw err
-    console.log(response)
-    console.log(meta?.activationValue)
     const outcome =
       response === 'timeout' ? 'TIMEOUT' :
       response === 'activate' && meta?.activationValue === 'Mark as done' ? 'DONE' :
       response === 'closed' || meta?.activationValue === undefined ? 'FAILED' : 'UNKNOWN'
-    appendFile(historyFile, `${start.toLocaleString()} - ${duration}m (${outcome}) => ${desc}\n`)
+    appendFile(historyFile, `${start.toLocaleString()} - ${seconds < 60 ? seconds + 's' : (seconds / 60) + 'm'} (${outcome}) => ${desc}\n`)
   })
 }
 
 const [duration, ...desc] = process.argv.slice(2)
-if (duration && desc)
-  startTimer(parseInt(duration), desc.join(' '))
+if (duration && desc) {
+  let seconds =
+    duration.endsWith('s') ? parseInt(duration.slice(0, -1)) :
+    duration.endsWith('m') ? parseInt(duration.slice(0, -1)) * 60 : parseInt(duration) * 60
+  startTimer(seconds, desc.join(' '))
+}
 else
   console.error('Require duration and description')
 
