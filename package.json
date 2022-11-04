@@ -1,5 +1,5 @@
 {
-  "name": "todo-notifier",
+  "name": "task-notifier",
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
@@ -10,6 +10,11 @@
   "author": "Arash Thr",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^18.11.9"
+    "@types/node": "^18.11.9",
+    "@types/node-notifier": "^8.0.2",
+    "node-notifier": "^10.0.1"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1"
   }
 }
