@@ -1,8 +1,9 @@
 import notifier from 'node-notifier'
 import path from 'node:path'
 import { appendFile } from 'node:fs/promises'
+import conf from './conf.json'
 
-const historyFile = 'tasks_history.md'
+const historyFile = path.join(__dirname, conf.historyFile)
 
 function timeout(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -11,14 +12,12 @@ function timeout(ms: number) {
 async function startTimer(seconds: number, desc: string) {
   const start = new Date()
   await timeout(seconds * 1000)
-  const iconPath = path.join(__dirname, 'task.jpg')
   notifier.notify({
     message: desc,
     actions: 'Mark as done',
     sound: true,
     wait: true,
     timeout: 30,
-    icon: iconPath
   }, (err, response, meta) => {
     if (err)
       throw err
